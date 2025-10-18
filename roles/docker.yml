@@ -1,0 +1,72 @@
+- name: Ensure apt cache is updated
+  apt:
+    update_cache: yes
+  tags: docker
+
+- name: Install required packages for Docker repo
+  apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg
+      - lsb-release
+    state: present
+  
+
+- name: Add Docker GPG key
+  ansible.builtin.apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Add Docker repository
+  ansible.builtin.apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable
+    state: present
+
+- name: Install Docker Engine
+  apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+    state: latest
+
+- name: Ensure /data/docker exists (target data-root)
+  file:
+    path: /data/docker
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Configure daemon.json with data-root
+  copy:
+    dest: /etc/docker/daemon.json
+    content: |
+      {
+        "data-root": "/data/docker",
+        "log-driver": "json-file",
+        "storage-driver": "overlay2"
+      }
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart docker
+
+- name: Stop docker service before move
+  service:
+    name: docker
+    state: stopped
+
+- name: Rsync old docker data (if exists) to new data-root
+  command: rsync -aHAX --numeric-ids --delete /var/lib/docker/ /data/docker/
+  args:
+    creates: /data/docker/containers  # idempotence: skip if target exists
+  when: ansible_facts['os_family'] == 'Debian'
+
+- name: Start docker
+  service:
+    name: docker
+    state: started
+  listen: restart docker
