@@ -1,0 +1,16 @@
+
+- name: Check if /data directory exists
+  ansible.builtin.stat:
+    path: /data
+  register: data_dir_exists
+
+- name: Generate Docker configuration file
+  ansible.builtin.template:
+    src: docker_config.j2
+    dest: /etc/docker/daemon.json
+    mode: '0644'
+  vars:
+    docker:
+      registry: "{{ docker_registry | default(None) }}"
+    data_dir_exists: "{{ data_dir_exists }}"
+  notify: Restart Docker

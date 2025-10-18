@@ -1,0 +1,7 @@
+{
+{% if docker.registry is defined %}
+  "insecure-registries": ["{{ docker.registry }}"],
+  "registry-mirrors": ["{{ docker.registry }}"]{% endif %}{% if data_dir_exists.stat.exists %},
+  "data-root": "/data/docker"
+{% endif %}
+}
