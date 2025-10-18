@@ -1,0 +1,7 @@
+- name: Ubuntu Server Configuration  
+  hosts: targets
+  become: true
+  # roles:
+    # - apt
+    # - docker
+    # - 
