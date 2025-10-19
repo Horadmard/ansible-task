@@ -1,7 +1,7 @@
 - name: Ubuntu Server Configuration  
   hosts: targets
   become: true
-  # roles:
-    # - apt
-    # - docker
-    # - 
+  roles:
+    - apt
+    - docker
+    - nvidia.nvidia_driver ## Extremely Dangerous

@@ -3,6 +3,14 @@
 This project provisions an Ubuntu Server: full system update, Docker install & data-root change to /data/docker, set custom Docker registry(arvanCloud), and GPU driver install if NVIDIA GPU present.
 
 ## How to run
+
+```bash
+chmod +x ./initializer.sh
+./initializer.sh
+## source your terminal
+## you can now use ansible commands
+```
+
 1. Fill inventory/hosts.yml with server IP and user.
 2. Run: `ANSIBLE_STDOUT_CALLBACK=debug ansible-playbook playbooks/site.yml | tee ansible_run_1.log`
 3. Run again to verify idempotence: `ansible-playbook playbooks/site.yml | tee ansible_run_2.log`
