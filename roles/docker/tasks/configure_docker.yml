@@ -6,11 +6,11 @@
 
 - name: Generate Docker configuration file
   ansible.builtin.template:
-    src: docker_config.j2
+    src: daemon.json.j2
     dest: /etc/docker/daemon.json
     mode: '0644'
   vars:
     docker:
-      registry: "{{ docker_registry | default(None) }}"
+      registry: "{{ docker.docker_registry | default(None) }}"
     data_dir_exists: "{{ data_dir_exists }}"
   notify: Restart Docker
