@@ -1,0 +1,53 @@
+- name: Uninstall old versionsUninstall old versions
+  apt:
+    name: "{{item}}"
+    state: absent 
+    update_cache: yes
+  loop: 
+    - docker.io
+    - docker-doc
+    - docker-compose
+    - docker-compose-v2
+    - podman-docker
+    - containerd runc
+  # ignore_errors: yes
+
+- name: Install using the apt repository
+  apt:
+    name: "{{item}}"
+    state: present
+    update_cache: yes
+  loop:
+    - ca-certificates
+    - curl
+  ignore_errors: yes
+
+- name: give GPG key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: add docker repo
+  apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu stable
+    state: present
+
+- name: Install the Docker packages
+  apt:
+    name: "{{item}}"
+    state: latest
+    update_cache: yes
+  loop:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
+    - docker-buildx-plugin
+    - docker-compose-plugin
+  # environment: "{{ proxy_env }}"
+  notify: restart docker
+
+- name: start and enable docker
+  service:
+    name: docker
+    state: started
+    enabled: yes
