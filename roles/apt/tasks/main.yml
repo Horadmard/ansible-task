@@ -4,11 +4,7 @@
     upgrade: yes
     cache_valid_time: 3600
 
-- name: Upgrade the OS (apt-get dist-upgrade)
+- name: apt dist-upgrade
   apt:
     upgrade: dist
-
-- name: Remove dependencies that are no longer required and purge their configuration files
-  apt:
-    autoremove: yes
-    purge: true
+    notify: apt cleanup

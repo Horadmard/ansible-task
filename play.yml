@@ -5,3 +5,7 @@
     - apt
     - docker
     - nvidia.nvidia_driver ## Extremely Dangerous
+  # tasks:
+  #   - name: Show Ansible Facts
+  #     debug:
+  #       var: ansible_facts

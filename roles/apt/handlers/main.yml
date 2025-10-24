@@ -1,3 +1,8 @@
-- name: Ensure apt cache is updated
+- name: apt update
   apt:
     update_cache: yes
+
+- name: apt cleanup 
+  apt:
+    autoremove: yes
+    purge: true

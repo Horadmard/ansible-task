@@ -12,8 +12,8 @@ chmod +x ./initializer.sh
 ```
 
 1. Fill inventory/hosts.yml with server IP and user.
-2. Run: `ANSIBLE_STDOUT_CALLBACK=debug ansible-playbook playbooks/site.yml | tee ansible_run_1.log`
-3. Run again to verify idempotence: `ansible-playbook playbooks/site.yml | tee ansible_run_2.log`
+2. Run: `ANSIBLE_STDOUT_CALLBACK=debug ansible-playbook playbooks/play.yml | tee ansible_run_1.log`
+3. Run again to verify idempotence: `ansible-playbook playbooks/play.yml | tee ansible_run_2.log`
 
 ## Verification
 - `docker info | grep "Docker Root Dir"` => `/data/docker`
