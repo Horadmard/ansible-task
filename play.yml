@@ -1,11 +1,12 @@
 - name: Ubuntu Server Configuration  
   hosts: targets
   become: true
-  roles:
-    - apt
-    - docker
-    - nvidia.nvidia_driver ## Extremely Dangerous
-  # tasks:
-  #   - name: Show Ansible Facts
-  #     debug:
-  #       var: ansible_facts
+  # roles:
+  #   - apt
+  #   - docker
+  #   - nvidia.nvidia_driver ## Extremely Dangerous
+
+  tasks:
+    - name: Show Ansible Facts
+      debug:
+        var: ansible_facts.distribution_release

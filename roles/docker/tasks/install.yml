@@ -1,8 +1,7 @@
-- name: Uninstall old versionsUninstall old versions
+- name: Uninstall old versions
   apt:
     name: "{{item}}"
     state: absent 
-    update_cache: yes
   loop: 
     - docker.io
     - docker-doc
@@ -21,6 +20,7 @@
     - ca-certificates
     - curl
   ignore_errors: yes
+  register: apt_out
 
 - name: give GPG key
   apt_key:
@@ -29,8 +29,9 @@
 
 - name: add docker repo
   apt_repository:
-    repo: deb https://download.docker.com/linux/ubuntu stable
+    repo: deb https://download.docker.com/linux/ubuntu {{ ansible_facts.distribution_release }} stable
     state: present
+  when: ansible_facts.distribution == "Ubuntu"
 
 - name: Install the Docker packages
   apt:
